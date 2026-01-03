@@ -212,7 +212,7 @@ export const EXPERIENCE = [
   {
     title: "Founder & Technical Lead",
     company: "Operator Control Systems",
-    period: "2024 – Present",
+    period: "2025 – Present",
     bullets: [
       "Founded industrial control systems company building modern HMI/SCADA solutions.",
       "Developed high-fidelity AI-powered platforms (Project Outreach, Pharma Vision) as core company assets.",
