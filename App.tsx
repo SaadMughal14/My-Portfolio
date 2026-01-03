@@ -235,6 +235,16 @@ const App: React.FC = () => {
           </div>
         </div>
 
+        {/* FLOATING MARQUEE BAR - Added as requested under the heading */}
+        <div className="w-screen relative left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] overflow-hidden border-y border-white/10 py-5 mb-24 md:mb-40 bg-white/[0.03] backdrop-blur-[2px]">
+          <div className="animate-marquee font-mono text-[9px] md:text-[11px] uppercase tracking-[0.4em] md:tracking-[0.6em] text-[#a3ff00] font-black whitespace-nowrap">
+            <span className="px-4">IN ORDER TO SEE THE FULL SYSTEMS IN THEIR PROPER UI SWITCH TO DESKTOP VIEW OR LAPTOP FOR THE BEST EXPERIENCE //&nbsp;</span>
+            <span className="px-4">IN ORDER TO SEE THE FULL SYSTEMS IN THEIR PROPER UI SWITCH TO DESKTOP VIEW OR LAPTOP FOR THE BEST EXPERIENCE //&nbsp;</span>
+            <span className="px-4">IN ORDER TO SEE THE FULL SYSTEMS IN THEIR PROPER UI SWITCH TO DESKTOP VIEW OR LAPTOP FOR THE BEST EXPERIENCE //&nbsp;</span>
+            <span className="px-4">IN ORDER TO SEE THE FULL SYSTEMS IN THEIR PROPER UI SWITCH TO DESKTOP VIEW OR LAPTOP FOR THE BEST EXPERIENCE //&nbsp;</span>
+          </div>
+        </div>
+
         <div className="space-y-32 md:space-y-64">
           {PROJECTS.map((p) => (
             <div key={p.id} className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-20 group relative">
