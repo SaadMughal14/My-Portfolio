@@ -20,22 +20,15 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
   const isOutreach = projectId === 'project-outreach';
   
   const [isInteracted, setIsInteracted] = useState(false);
-  const [isLocking, setIsLocking] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // Monitor interaction for Project Outreach specifically
   useEffect(() => {
     if (!isOutreach) return;
 
     const handleBlur = () => {
-      // If the active element is our iframe, the user just clicked it
       if (document.activeElement === iframeRef.current) {
-        setIsLocking(true);
-        // Simulate the time it takes for the "second screen" to show before locking
-        setTimeout(() => {
-          setIsInteracted(true);
-          setIsLocking(false);
-        }, 1800);
+        // Instant lock after first interaction (removal of isLocking delay)
+        setIsInteracted(true);
       }
     };
 
@@ -44,7 +37,6 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
   }, [isOutreach]);
 
   useEffect(() => {
-    // Only lock keyboard if full access is off AND (it's not outreach OR outreach has already been locked)
     const shouldLockKeyboard = !isFullAccess && (!isOutreach || isInteracted);
     if (!shouldLockKeyboard) return;
 
@@ -58,9 +50,6 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
     return () => window.removeEventListener('keydown', handleKeyDown, true);
   }, [isFullAccess, isOutreach, isInteracted]);
 
-  // Determine if overlay should be shown
-  const showOverlay = (!isFullAccess && !isOutreach) || (isOutreach && isInteracted);
-
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 md:px-12 py-4 md:py-12">
       <div 
@@ -73,17 +62,17 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         <div className="flex flex-col md:flex-row md:items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-white/20 bg-[#0a0a0a] gap-3">
           <div className="flex items-center gap-3">
             <div className="flex gap-1.5">
-              <div className={`w-2.5 h-2.5 rounded-full ${isLocking ? 'bg-yellow-500 animate-pulse' : 'bg-red-600 animate-pulse'}`} />
+              <div className={`w-2.5 h-2.5 rounded-full ${isInteracted && !isFullAccess ? 'bg-red-600' : 'bg-green-500'} animate-pulse`} />
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
             </div>
             <div className="h-4 w-px bg-white/40 mx-1" />
             <div className="flex flex-col">
               <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#a3ff00] font-bold">
-                {isFullAccess ? 'LIVE_ENVIRONMENT' : isLocking ? 'SYSTEM_INITIALIZING' : 'PROTOTYPE_VIEWER'} // {title}
+                PROTOTYPE_VIEWER // {title}
               </span>
               <span className="font-mono text-[7px] md:text-[8px] uppercase tracking-[0.2em] text-white font-bold">
-                ACTIVE_MODE: {isFullAccess ? 'FULL_ACCESS' : isLocking ? 'TRANSITIONING' : isInteracted ? 'RESTRICTED' : 'INITIAL_GATE'}
+                ACTIVE_MODE: {isFullAccess ? 'FULL_ACCESS' : isInteracted ? 'RESTRICTED' : 'UNINITIALIZED'}
               </span>
             </div>
           </div>
@@ -97,9 +86,9 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         </div>
 
         <div className="relative flex-grow bg-black overflow-hidden group">
-          {showOverlay && (
+          {/* Default lock for standard restricted projects */}
+          {!isFullAccess && !isOutreach && (
             <div className="absolute inset-0 z-30 pointer-events-none animate-in fade-in duration-700">
-              <div className="absolute top-0 left-0 right-0 h-16 pointer-events-none border-b border-[#a3ff00]/20 bg-gradient-to-b from-black/60 to-transparent" />
               <div className="absolute inset-0 pointer-events-auto cursor-not-allowed flex items-center justify-center group/shield">
                 <div className="opacity-0 group-hover/shield:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-4 bg-black/90 p-8 rounded-2xl backdrop-blur-sm border border-[#a3ff00]/40">
                    <div className="w-12 h-12 border-2 border-[#a3ff00]/60 rounded-full flex items-center justify-center">
@@ -113,20 +102,28 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
             </div>
           )}
 
-          {isLocking && (
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none">
-                <div className="font-mono text-[10px] text-[#a3ff00] uppercase tracking-[0.5em] font-black bg-black/80 px-4 py-2 border border-[#a3ff00]/40 animate-pulse">
-                  BOOTING_SECURE_OS...
-                </div>
-             </div>
+          {/* Specialized Sidebar-Enabled Lock for Project Outreach */}
+          {isOutreach && isInteracted && (
+            <div className="absolute inset-0 z-30 flex pointer-events-none animate-in fade-in duration-300">
+              {/* Sidebar passthrough: Interactive area */}
+              <div className="w-[80px] md:w-[280px] h-full" />
+              {/* Content lock: Blocked area */}
+              <div className="flex-grow h-full pointer-events-auto cursor-not-allowed group/outreach">
+                 <div className="w-full h-full flex flex-col items-center justify-center bg-black/10 opacity-0 group-hover/outreach:opacity-100 transition-opacity duration-500 backdrop-blur-[1px]">
+                    <div className="p-4 border-2 border-[#a3ff00]/60 bg-black/90 font-mono text-[10px] text-[#a3ff00] uppercase tracking-[0.3em] font-black rounded shadow-2xl">
+                      CONTENT_LOCKED // SIDEBAR_NAV_ONLY
+                    </div>
+                 </div>
+              </div>
+            </div>
           )}
 
           <iframe 
             ref={iframeRef}
             src={url}
-            className={`w-full h-full border-none transition-opacity duration-1000 ${isLocking ? 'opacity-30' : 'opacity-100'}`}
+            className="w-full h-full border-none"
             title={title}
-            sandbox={`allow-scripts allow-same-origin ${isFullAccess || (isOutreach && !isInteracted) ? 'allow-forms allow-modals' : ''}`} 
+            sandbox={`allow-scripts allow-same-origin ${isFullAccess || isOutreach ? 'allow-forms allow-modals' : ''}`} 
             loading="lazy"
           />
 
@@ -135,7 +132,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         
         <div className="px-4 md:px-6 py-2 md:py-3 border-t border-white/20 bg-[#050505] flex justify-between items-center font-mono text-[8px] md:text-[10px] uppercase tracking-[0.3em]">
             <span className="text-white font-bold hidden sm:inline">
-              {isFullAccess ? 'Full Interaction Protocol Active' : isInteracted ? 'Restricted Prototype Mode: Data Input Blocked' : 'Uninitialized Prototype: Awaiting Primary Input'}
+              {isFullAccess ? 'Full Interaction Protocol Active' : isInteracted ? 'Restricted Mode: Use sidebar for navigation' : 'Awaiting primary input...'}
             </span>
             <span className="text-[#a3ff00] font-black tracking-widest">
               REF: SAAD_ENG_MOD_{projectId.toUpperCase().replace('-', '_')}
@@ -198,25 +195,6 @@ const App: React.FC = () => {
             </button>
           </div>
         </div>
-
-        {/* HERO FLOATING LINKEDIN - REPOSITIONED FOR BETTER FIT */}
-        <div className="absolute bottom-10 right-10 z-20 hidden md:block">
-           <a 
-              href={LINKEDIN_URL} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="group flex items-center gap-4 text-white hover:text-[#a3ff00] transition-colors font-mono text-[10px] tracking-widest font-black"
-            >
-              <LinkedInIcon className="w-8 h-8" />
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity">LINKEDIN_ACCESS</span>
-            </a>
-        </div>
-        {/* Mobile alternative */}
-        <div className="absolute bottom-6 z-20 md:hidden">
-           <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
-              <LinkedInIcon className="w-8 h-8 text-[#a3ff00]" />
-            </a>
-        </div>
       </section>
 
       {/* SUMMARY */}
@@ -225,9 +203,6 @@ const App: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 md:gap-20">
             <div className="lg:col-span-1">
               <h3 className="font-mono text-[#a3ff00] text-sm uppercase tracking-[0.4em] font-black border-l-4 border-[#a3ff00] pl-6">System_Manifest</h3>
-              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="mt-8 block font-mono text-[10px] text-white hover:text-[#a3ff00] tracking-widest font-bold transition-colors">
-                VERIFY_STATION
-              </a>
             </div>
             <div className="lg:col-span-3">
               <p className="text-2xl sm:text-3xl md:text-5xl leading-[1.1] font-black uppercase tracking-tighter text-white">
@@ -337,9 +312,6 @@ const App: React.FC = () => {
                       <li key={idx} className="text-xs md:text-base text-white font-bold leading-relaxed uppercase tracking-wide">• {b}</li>
                     ))}
                   </ul>
-                  <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="mt-8 inline-block font-mono text-[9px] text-[#a3ff00] font-black tracking-widest border-b border-[#a3ff00] transition-colors hover:text-white hover:border-white uppercase">
-                    VIEW_STATION_CREDENTIALS
-                  </a>
                 </div>
               ))}
             </div>
@@ -356,7 +328,7 @@ const App: React.FC = () => {
             </div>
             
             <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="mt-12 group flex items-center gap-6 bg-[#a3ff00] text-black px-10 py-6 rounded-2xl font-black uppercase text-sm tracking-[0.4em] hover:bg-white transition-all shadow-[0_0_40px_rgba(163,255,0,0.3)]">
-              Connect on LinkedIn
+              LinkedIn
               <span className="group-hover:translate-x-2 transition-transform">→</span>
             </a>
 
@@ -385,7 +357,7 @@ const App: React.FC = () => {
           <div className="flex flex-col md:flex-row gap-8 md:gap-16 font-mono text-[11px] md:text-[14px] uppercase tracking-[0.5em] md:tracking-[0.7em] text-white font-black items-center">
             <a href="mailto:isaadimughal@gmail.com" className="hover:text-[#a3ff00] transition-colors border-b-2 border-white hover:border-[#a3ff00]">EMAIL_DIRECT</a>
             <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-[#a3ff00] transition-colors border-b-2 border-white hover:border-[#a3ff00]">
-              <LinkedInIcon /> LINKEDIN_STATION
+              <LinkedInIcon /> LINKEDIN
             </a>
           </div>
           <div className="text-center md:text-right">
