@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LetterGlitch from './components/LetterGlitch';
 import { PROJECTS, EXPERIENCE, SKILLS } from './constants';
 
@@ -17,9 +17,36 @@ const LinkedInIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
 
 const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClose: () => void }> = ({ url, title, projectId, onClose }) => {
   const isFullAccess = projectId === 'operator-cs';
+  const isOutreach = projectId === 'project-outreach';
+  
+  const [isInteracted, setIsInteracted] = useState(false);
+  const [isLocking, setIsLocking] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Monitor interaction for Project Outreach specifically
+  useEffect(() => {
+    if (!isOutreach) return;
+
+    const handleBlur = () => {
+      // If the active element is our iframe, the user just clicked it
+      if (document.activeElement === iframeRef.current) {
+        setIsLocking(true);
+        // Simulate the time it takes for the "second screen" to show before locking
+        setTimeout(() => {
+          setIsInteracted(true);
+          setIsLocking(false);
+        }, 1800);
+      }
+    };
+
+    window.addEventListener('blur', handleBlur);
+    return () => window.removeEventListener('blur', handleBlur);
+  }, [isOutreach]);
 
   useEffect(() => {
-    if (isFullAccess) return;
+    // Only lock keyboard if full access is off AND (it's not outreach OR outreach has already been locked)
+    const shouldLockKeyboard = !isFullAccess && (!isOutreach || isInteracted);
+    if (!shouldLockKeyboard) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key.length === 1 || e.key === 'Enter' || e.key === 'Backspace') {
@@ -29,7 +56,10 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
     };
     window.addEventListener('keydown', handleKeyDown, true);
     return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, [isFullAccess]);
+  }, [isFullAccess, isOutreach, isInteracted]);
+
+  // Determine if overlay should be shown
+  const showOverlay = (!isFullAccess && !isOutreach) || (isOutreach && isInteracted);
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 md:px-12 py-4 md:py-12">
@@ -43,17 +73,17 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         <div className="flex flex-col md:flex-row md:items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-white/20 bg-[#0a0a0a] gap-3">
           <div className="flex items-center gap-3">
             <div className="flex gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse" />
+              <div className={`w-2.5 h-2.5 rounded-full ${isLocking ? 'bg-yellow-500 animate-pulse' : 'bg-red-600 animate-pulse'}`} />
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
             </div>
             <div className="h-4 w-px bg-white/40 mx-1" />
             <div className="flex flex-col">
               <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#a3ff00] font-bold">
-                {isFullAccess ? 'LIVE_ENVIRONMENT' : 'PROTOTYPE_VIEWER'} // {title}
+                {isFullAccess ? 'LIVE_ENVIRONMENT' : isLocking ? 'SYSTEM_INITIALIZING' : 'PROTOTYPE_VIEWER'} // {title}
               </span>
               <span className="font-mono text-[7px] md:text-[8px] uppercase tracking-[0.2em] text-white font-bold">
-                ACTIVE_MODE: {isFullAccess ? 'FULL_ACCESS' : 'RESTRICTED'}
+                ACTIVE_MODE: {isFullAccess ? 'FULL_ACCESS' : isLocking ? 'TRANSITIONING' : isInteracted ? 'RESTRICTED' : 'INITIAL_GATE'}
               </span>
             </div>
           </div>
@@ -67,8 +97,8 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         </div>
 
         <div className="relative flex-grow bg-black overflow-hidden group">
-          {!isFullAccess && (
-            <div className="absolute inset-0 z-30 pointer-events-none">
+          {showOverlay && (
+            <div className="absolute inset-0 z-30 pointer-events-none animate-in fade-in duration-700">
               <div className="absolute top-0 left-0 right-0 h-16 pointer-events-none border-b border-[#a3ff00]/20 bg-gradient-to-b from-black/60 to-transparent" />
               <div className="absolute inset-0 pointer-events-auto cursor-not-allowed flex items-center justify-center group/shield">
                 <div className="opacity-0 group-hover/shield:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-4 bg-black/90 p-8 rounded-2xl backdrop-blur-sm border border-[#a3ff00]/40">
@@ -83,11 +113,20 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
             </div>
           )}
 
+          {isLocking && (
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none">
+                <div className="font-mono text-[10px] text-[#a3ff00] uppercase tracking-[0.5em] font-black bg-black/80 px-4 py-2 border border-[#a3ff00]/40 animate-pulse">
+                  BOOTING_SECURE_OS...
+                </div>
+             </div>
+          )}
+
           <iframe 
+            ref={iframeRef}
             src={url}
-            className="w-full h-full border-none opacity-100 transition-opacity"
+            className={`w-full h-full border-none transition-opacity duration-1000 ${isLocking ? 'opacity-30' : 'opacity-100'}`}
             title={title}
-            sandbox={`allow-scripts allow-same-origin ${isFullAccess ? 'allow-forms allow-modals' : ''}`} 
+            sandbox={`allow-scripts allow-same-origin ${isFullAccess || (isOutreach && !isInteracted) ? 'allow-forms allow-modals' : ''}`} 
             loading="lazy"
           />
 
@@ -96,7 +135,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         
         <div className="px-4 md:px-6 py-2 md:py-3 border-t border-white/20 bg-[#050505] flex justify-between items-center font-mono text-[8px] md:text-[10px] uppercase tracking-[0.3em]">
             <span className="text-white font-bold hidden sm:inline">
-              {isFullAccess ? 'Full Interaction Protocol Active' : 'Restricted Prototype Mode: Data Input Blocked'}
+              {isFullAccess ? 'Full Interaction Protocol Active' : isInteracted ? 'Restricted Prototype Mode: Data Input Blocked' : 'Uninitialized Prototype: Awaiting Primary Input'}
             </span>
             <span className="text-[#a3ff00] font-black tracking-widest">
               REF: SAAD_ENG_MOD_{projectId.toUpperCase().replace('-', '_')}
