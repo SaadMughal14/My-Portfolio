@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import LetterGlitch from './components/LetterGlitch';
 import { PROJECTS, EXPERIENCE, SKILLS } from './constants';
 
 const LINKEDIN_URL = "https://linkedin.com/in/saad-mughal-460971180";
+const EMAIL_ADDRESS = "isaadimughal@gmail.com";
 
 const LinkedInIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
   <svg 
@@ -27,7 +27,6 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
 
     const handleBlur = () => {
       if (document.activeElement === iframeRef.current) {
-        // Instant lock after first interaction
         setIsInteracted(true);
       }
     };
@@ -86,7 +85,6 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         </div>
 
         <div className="relative flex-grow bg-black overflow-hidden group">
-          {/* Default lock for standard restricted projects */}
           {!isFullAccess && !isOutreach && (
             <div className="absolute inset-0 z-30 pointer-events-none animate-in fade-in duration-700">
               <div className="absolute inset-0 pointer-events-auto cursor-not-allowed flex items-center justify-center group/shield">
@@ -102,12 +100,9 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
             </div>
           )}
 
-          {/* Specialized Sidebar-Enabled Lock for Project Outreach - Matches other projects visual style */}
           {isOutreach && isInteracted && (
             <div className="absolute inset-0 z-30 flex pointer-events-none animate-in fade-in duration-300">
-              {/* Sidebar passthrough: Interactive area */}
               <div className="w-[80px] md:w-[280px] h-full" />
-              {/* Content lock: Blocked area with matching visual style */}
               <div className="flex-grow h-full pointer-events-auto cursor-not-allowed group/outreach">
                  <div className="w-full h-full flex flex-col items-center justify-center bg-black/60 opacity-0 group-hover/outreach:opacity-100 transition-opacity duration-500 backdrop-blur-[2px]">
                     <div className="flex flex-col items-center gap-4 bg-black/90 p-8 rounded-2xl border border-[#a3ff00]/40 shadow-2xl">
@@ -155,15 +150,33 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
 
 const App: React.FC = () => {
   const [activeDemo, setActiveDemo] = useState<{url: string, title: string, projectId: string} | null>(null);
+  const [emailOpen, setEmailOpen] = useState(false);
+  const emailRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (activeDemo) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = 'unset';
   }, [activeDemo]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (emailRef.current && !emailRef.current.contains(event.target as Node)) {
+        setEmailOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const scrollToWork = (e: React.MouseEvent) => {
     e.preventDefault();
     document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(EMAIL_ADDRESS);
+    alert("Email copied to system clipboard.");
+    setEmailOpen(false);
   };
 
   return (
@@ -190,12 +203,50 @@ const App: React.FC = () => {
           </h2>
 
           <div className="flex flex-col items-center gap-6 md:gap-8 font-mono text-[10px] md:text-[14px] uppercase tracking-[0.4em] text-white font-bold">
-            <span className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#a3ff00] animate-ping" />
-              isaadimughal@gmail.com
-            </span>
             
-            <span>📍 REMOTE (GLOBAL)</span>
+            {/* ENHANCED INTERACTIVE EMAIL COMPONENT */}
+            <div className="relative group/email-root" ref={emailRef}>
+              <button 
+                onClick={() => setEmailOpen(!emailOpen)}
+                className="flex items-center gap-3 transition-all duration-300 hover:scale-[1.03] active:scale-95 group"
+                aria-label="Toggle contact options"
+              >
+                <span className="text-lg md:text-2xl text-[#a3ff00] drop-shadow-[0_0_8px_rgba(163,255,0,0.5)]">✉</span>
+                <span className="lowercase font-mono tracking-tight text-sm md:text-lg lg:text-xl font-bold border-b-2 border-dashed border-[#a3ff00]/40 group-hover:border-[#a3ff00] text-white/90 group-hover:text-white transition-all">
+                  {EMAIL_ADDRESS}
+                </span>
+                <span className={`text-[8px] md:text-[10px] transition-transform duration-500 ${emailOpen ? 'rotate-180' : 'rotate-0'} text-[#a3ff00]/60`}>▼</span>
+              </button>
+
+              {/* TACTICAL EMAIL DROPDOWN */}
+              {emailOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-[260px] md:w-[320px] bg-[#050505] border-2 border-[#a3ff00]/40 rounded-xl p-3 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,1),0_0_30px_rgba(163,255,0,0.15)] z-[100] animate-in fade-in zoom-in-95 duration-300">
+                  <div className="flex flex-col gap-2">
+                    <a 
+                      href={`mailto:${EMAIL_ADDRESS}`}
+                      className="flex items-center justify-between px-5 py-4 bg-white/5 hover:bg-[#a3ff00] hover:text-black rounded-lg transition-all group/opt border border-white/5"
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Send Direct Email</span>
+                      <span className="text-sm">↗</span>
+                    </a>
+                    <button 
+                      onClick={copyToClipboard}
+                      className="flex items-center justify-between px-5 py-4 bg-white/5 hover:bg-[#a3ff00] hover:text-black rounded-lg transition-all group/opt border border-white/5"
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Copy Address</span>
+                      <span className="text-sm">📋</span>
+                    </button>
+                  </div>
+                  {/* Tactical Pointer */}
+                  <div className="absolute -top-[9px] left-1/2 -translate-x-1/2 w-4 h-4 bg-[#050505] border-l-2 border-t-2 border-[#a3ff00]/40 rotate-45" />
+                </div>
+              )}
+            </div>
+            
+            <span className="flex items-center gap-3">
+              <span className="text-lg md:text-2xl">📍</span>
+              <span>REMOTE (GLOBAL)</span>
+            </span>
 
             <button 
               onClick={scrollToWork} 
@@ -235,7 +286,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* FLOATING MARQUEE BAR - Added as requested under the heading */}
+        {/* FLOATING MARQUEE BAR */}
         <div className="w-screen relative left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] overflow-hidden border-y border-white/10 py-5 mb-24 md:mb-40 bg-white/[0.03] backdrop-blur-[2px]">
           <div className="animate-marquee font-mono text-[9px] md:text-[11px] uppercase tracking-[0.4em] md:tracking-[0.6em] text-[#a3ff00] font-black whitespace-nowrap">
             <span className="px-4">IN ORDER TO SEE THE FULL SYSTEMS IN THEIR PROPER UI SWITCH TO DESKTOP VIEW OR LAPTOP FOR THE BEST EXPERIENCE //&nbsp;</span>
@@ -338,7 +389,7 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          {/* Executive Summary Column - Enhanced Responsiveness for Laptops */}
+          {/* Executive Summary Column */}
           <div className="xl:col-span-7 bg-[#0a0a0a] p-6 sm:p-12 lg:p-16 xl:p-20 rounded-3xl md:rounded-[3rem] border-2 border-white/20 shadow-inner flex flex-col items-center xl:items-start relative overflow-hidden order-1 xl:order-2">
             <h3 className="font-mono text-[#a3ff00] text-[10px] md:text-[12px] uppercase tracking-[0.5em] font-black mb-10 text-center xl:text-left">Executive_Summary</h3>
             <p className="text-3xl sm:text-4xl lg:text-5xl xl:text-7xl font-black uppercase tracking-tighter leading-[0.9] italic text-white mb-12 xl:text-left text-center">
