@@ -27,7 +27,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
 
     const handleBlur = () => {
       if (document.activeElement === iframeRef.current) {
-        // Instant lock after first interaction (removal of isLocking delay)
+        // Instant lock after first interaction
         setIsInteracted(true);
       }
     };
@@ -102,16 +102,26 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
             </div>
           )}
 
-          {/* Specialized Sidebar-Enabled Lock for Project Outreach */}
+          {/* Specialized Sidebar-Enabled Lock for Project Outreach - Matches other projects visual style */}
           {isOutreach && isInteracted && (
             <div className="absolute inset-0 z-30 flex pointer-events-none animate-in fade-in duration-300">
               {/* Sidebar passthrough: Interactive area */}
               <div className="w-[80px] md:w-[280px] h-full" />
-              {/* Content lock: Blocked area */}
+              {/* Content lock: Blocked area with matching visual style */}
               <div className="flex-grow h-full pointer-events-auto cursor-not-allowed group/outreach">
-                 <div className="w-full h-full flex flex-col items-center justify-center bg-black/10 opacity-0 group-hover/outreach:opacity-100 transition-opacity duration-500 backdrop-blur-[1px]">
-                    <div className="p-4 border-2 border-[#a3ff00]/60 bg-black/90 font-mono text-[10px] text-[#a3ff00] uppercase tracking-[0.3em] font-black rounded shadow-2xl">
-                      CONTENT_LOCKED // SIDEBAR_NAV_ONLY
+                 <div className="w-full h-full flex flex-col items-center justify-center bg-black/60 opacity-0 group-hover/outreach:opacity-100 transition-opacity duration-500 backdrop-blur-[2px]">
+                    <div className="flex flex-col items-center gap-4 bg-black/90 p-8 rounded-2xl border border-[#a3ff00]/40 shadow-2xl">
+                       <div className="w-12 h-12 border-2 border-[#a3ff00]/60 rounded-full flex items-center justify-center">
+                         <div className="w-3 h-3 bg-red-600 rounded-full animate-ping" />
+                       </div>
+                       <div className="flex flex-col items-center gap-3">
+                         <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#a3ff00] px-6 py-3 border-2 border-[#a3ff00]/40 rounded-md font-bold">
+                           SECURE_CONTENT_LOCKED
+                         </span>
+                         <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[#a3ff00]/50 font-black">
+                           SIDEBAR_NAV_ONLY
+                         </span>
+                       </div>
                     </div>
                  </div>
               </div>
