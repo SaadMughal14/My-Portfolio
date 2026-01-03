@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from 'react';
 
 interface LetterGlitchProps {
@@ -171,9 +172,9 @@ const LetterGlitch: React.FC<LetterGlitchProps> = ({
     <div className="relative w-full h-full bg-black overflow-hidden">
       <canvas ref={canvasRef} className="block w-full h-full" />
       
-      {/* REFINED VIGNETTE - Lesser black part, optimized for text legibility without blocking the background */}
+      {/* IMPROVED VIGNETTE LAYERS - Very dark center for clarity */}
       {centerVignette && (
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,0.85)_0%,_rgba(0,0,0,0.4)_40%,_rgba(0,0,0,0)_70%)]" />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_0%,_rgba(0,0,0,0.9)_25%,_rgba(0,0,0,0.5)_50%,_rgba(0,0,0,0)_80%)]" />
       )}
       
       {outerVignette && (
@@ -181,7 +182,7 @@ const LetterGlitch: React.FC<LetterGlitchProps> = ({
       )}
       
       {/* INDUSTRIAL OVERLAY */}
-      <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px]" />
+      <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.15)_50%)] bg-[length:100%_4px]" />
       <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </div>
   );

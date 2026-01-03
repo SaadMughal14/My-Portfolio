@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import LetterGlitch from './components/LetterGlitch';
 import { PROJECTS, EXPERIENCE, SKILLS } from './constants';
@@ -304,11 +305,10 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* EXPERIENCE / EXECUTIVE SUMMARY */}
+      {/* EXPERIENCE */}
       <section id="about" className="py-24 md:py-40 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-16 lg:gap-24 xl:gap-32">
-          {/* Deployment Logs Column */}
-          <div className="xl:col-span-5 order-2 xl:order-1">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 md:gap-32">
+          <div className="lg:col-span-5">
             <h3 className="font-mono text-[#a3ff00] text-sm uppercase tracking-[0.4em] font-black mb-12 md:mb-20 border-l-4 border-[#a3ff00] pl-6">Deployment_Logs</h3>
             <div className="space-y-16 md:space-y-24">
               {EXPERIENCE.map((exp, i) => (
@@ -327,13 +327,12 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          {/* Executive Summary Column - Enhanced Responsiveness for Laptops */}
-          <div className="xl:col-span-7 bg-[#0a0a0a] p-6 sm:p-12 lg:p-16 xl:p-20 rounded-3xl md:rounded-[3rem] border-2 border-white/20 shadow-inner flex flex-col items-center xl:items-start relative overflow-hidden order-1 xl:order-2">
-            <h3 className="font-mono text-[#a3ff00] text-[10px] md:text-[12px] uppercase tracking-[0.5em] font-black mb-10 text-center xl:text-left">Executive_Summary</h3>
-            <p className="text-3xl sm:text-4xl lg:text-5xl xl:text-7xl font-black uppercase tracking-tighter leading-[0.9] italic text-white mb-12 xl:text-left text-center">
+          <div className="lg:col-span-7 bg-[#0a0a0a] p-8 md:p-20 rounded-3xl md:rounded-[3rem] border-2 border-white/20 shadow-inner flex flex-col items-center md:items-start relative overflow-hidden">
+            <h3 className="font-mono text-[#a3ff00] text-[10px] md:text-[12px] uppercase tracking-[0.5em] font-black mb-10 text-center md:text-left">Executive_Summary</h3>
+            <p className="text-3xl sm:text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9] italic text-white mb-12 md:text-left text-center">
               "Architecting autonomous pipelines to eliminate human bottlenecks."
             </p>
-            <div className="text-base sm:text-xl lg:text-2xl xl:text-3xl text-white leading-relaxed font-black space-y-8 md:space-y-10 uppercase tracking-tight">
+            <div className="text-lg sm:text-xl md:text-3xl text-white leading-relaxed font-black space-y-8 md:space-y-10 uppercase tracking-tight">
               <p>Specialized in deep integration of AI reasoning with real-world business logic. I build systems that don't just 'assist' but 'operate'.</p>
               <p>Expertise spans from high-throughput SCADA systems for pharmaceuticals to multi-agent content distribution engines.</p>
             </div>
