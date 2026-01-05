@@ -5,6 +5,9 @@ import { PROJECTS, EXPERIENCE, SKILLS } from './constants';
 const LINKEDIN_URL = "https://linkedin.com/in/saad-mughal-460971180";
 const EMAIL_ADDRESS = "isaadimughal@gmail.com";
 
+// Simple decoding helper for obfuscated links
+const decodeLink = (encoded?: string) => encoded ? atob(encoded) : '';
+
 const LinkedInIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
   <svg 
     className={`${className} fill-current`}
@@ -181,8 +184,8 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white font-['Inter_Tight'] selection:bg-[#a3ff00] selection:text-black overflow-x-hidden">
-      {/* HERO SECTION */}
-      <section className="relative h-[100svh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+      {/* HERO SECTION - Responsive scaling for various laptop screens */}
+      <section className="relative h-[100svh] min-h-[600px] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <LetterGlitch 
             glitchSpeed={50}
@@ -193,64 +196,63 @@ const App: React.FC = () => {
           />
         </div>
         
-        <div className="relative z-10 max-w-full md:max-w-7xl flex flex-col items-center">
-          <h1 className="text-5xl sm:text-7xl md:text-9xl lg:text-[13rem] font-black uppercase tracking-[-0.07em] leading-[0.8] mb-8 md:mb-12 animate-in fade-in slide-in-from-bottom-12 duration-1000 select-none drop-shadow-2xl text-white">
+        <div className="relative z-10 max-w-full md:max-w-7xl flex flex-col items-center px-2">
+          <h1 className="text-[clamp(3.5rem,14vw,6rem)] sm:text-[clamp(6rem,18vw,9rem)] lg:text-[clamp(9rem,20vw,13rem)] font-black uppercase tracking-[-0.07em] leading-[0.8] mb-6 md:mb-12 animate-in fade-in slide-in-from-bottom-12 duration-1000 select-none drop-shadow-2xl text-white">
             SAAD<br/>MUGHAL
           </h1>
           
-          <h2 className="text-[10px] sm:text-xs md:text-xl lg:text-2xl font-mono uppercase tracking-[0.3em] sm:tracking-[0.4em] md:tracking-[0.6em] text-[#a3ff00] font-black animate-pulse mb-8 md:mb-12">
+          <h2 className="text-[clamp(8px,2.5vw,12px)] sm:text-[clamp(10px,3vw,14px)] md:text-xl lg:text-2xl font-mono uppercase tracking-[0.2em] sm:tracking-[0.4em] md:tracking-[0.6em] text-[#a3ff00] font-black animate-pulse mb-6 md:mb-12">
             AI ENGINEER | FULL-STACK | LLM SPECIALIST
           </h2>
 
-          <div className="flex flex-col items-center gap-6 md:gap-8 font-mono text-[10px] md:text-[14px] uppercase tracking-[0.4em] text-white font-bold">
+          <div className="flex flex-col items-center gap-4 md:gap-8 font-mono text-[9px] md:text-[14px] uppercase tracking-[0.3em] md:tracking-[0.4em] text-white font-bold">
             
             {/* ENHANCED INTERACTIVE EMAIL COMPONENT */}
             <div className="relative group/email-root" ref={emailRef}>
               <button 
                 onClick={() => setEmailOpen(!emailOpen)}
-                className="flex items-center gap-3 transition-all duration-300 hover:scale-[1.03] active:scale-95 group"
+                className="flex items-center gap-2 md:gap-3 transition-all duration-300 hover:scale-[1.03] active:scale-95 group"
                 aria-label="Toggle contact options"
               >
-                <span className="text-lg md:text-2xl text-[#a3ff00] drop-shadow-[0_0_8px_rgba(163,255,0,0.5)]">✉</span>
-                <span className="lowercase font-mono tracking-tight text-sm md:text-lg lg:text-xl font-bold border-b-2 border-dashed border-[#a3ff00]/40 group-hover:border-[#a3ff00] text-white/90 group-hover:text-white transition-all">
+                <span className="text-sm md:text-2xl text-[#a3ff00] drop-shadow-[0_0_8px_rgba(163,255,0,0.5)]">✉</span>
+                <span className="lowercase font-mono tracking-tight text-[11px] md:text-lg lg:text-xl font-bold border-b-2 border-dashed border-[#a3ff00]/40 group-hover:border-[#a3ff00] text-white/90 group-hover:text-white transition-all">
                   {EMAIL_ADDRESS}
                 </span>
-                <span className={`text-[8px] md:text-[10px] transition-transform duration-500 ${emailOpen ? 'rotate-180' : 'rotate-0'} text-[#a3ff00]/60`}>▼</span>
+                <span className={`text-[6px] md:text-[10px] transition-transform duration-500 ${emailOpen ? 'rotate-180' : 'rotate-0'} text-[#a3ff00]/60`}>▼</span>
               </button>
 
               {/* TACTICAL EMAIL DROPDOWN */}
               {emailOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-[260px] md:w-[320px] bg-[#050505] border-2 border-[#a3ff00]/40 rounded-xl p-3 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,1),0_0_30px_rgba(163,255,0,0.15)] z-[100] animate-in fade-in zoom-in-95 duration-300">
-                  <div className="flex flex-col gap-2">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 md:mt-6 w-[220px] md:w-[320px] bg-[#050505] border-2 border-[#a3ff00]/40 rounded-xl p-2 md:p-3 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,1),0_0_30px_rgba(163,255,0,0.15)] z-[100] animate-in fade-in zoom-in-95 duration-300">
+                  <div className="flex flex-col gap-1.5 md:gap-2">
                     <a 
                       href={`mailto:${EMAIL_ADDRESS}`}
-                      className="flex items-center justify-between px-5 py-4 bg-white/5 hover:bg-[#a3ff00] hover:text-black rounded-lg transition-all group/opt border border-white/5"
+                      className="flex items-center justify-between px-3 md:px-5 py-3 md:py-4 bg-white/5 hover:bg-[#a3ff00] hover:text-black rounded-lg transition-all group/opt border border-white/5"
                     >
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Send Direct Email</span>
-                      <span className="text-sm">↗</span>
+                      <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em]">Send Direct Email</span>
+                      <span className="text-xs md:text-sm">↗</span>
                     </a>
                     <button 
                       onClick={copyToClipboard}
-                      className="flex items-center justify-between px-5 py-4 bg-white/5 hover:bg-[#a3ff00] hover:text-black rounded-lg transition-all group/opt border border-white/5"
+                      className="flex items-center justify-between px-3 md:px-5 py-3 md:py-4 bg-white/5 hover:bg-[#a3ff00] hover:text-black rounded-lg transition-all group/opt border border-white/5"
                     >
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">Copy Address</span>
-                      <span className="text-sm">📋</span>
+                      <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em]">Copy Address</span>
+                      <span className="text-xs md:text-sm">📋</span>
                     </button>
                   </div>
-                  {/* Tactical Pointer */}
-                  <div className="absolute -top-[9px] left-1/2 -translate-x-1/2 w-4 h-4 bg-[#050505] border-l-2 border-t-2 border-[#a3ff00]/40 rotate-45" />
+                  <div className="absolute -top-[7px] md:-top-[9px] left-1/2 -translate-x-1/2 w-3 h-3 md:w-4 md:h-4 bg-[#050505] border-l-2 border-t-2 border-[#a3ff00]/40 rotate-45" />
                 </div>
               )}
             </div>
             
-            <span className="flex items-center gap-3">
-              <span className="text-lg md:text-2xl">📍</span>
-              <span>REMOTE (GLOBAL)</span>
+            <span className="flex items-center gap-2 md:gap-3">
+              <span className="text-sm md:text-2xl">📍</span>
+              <span className="text-[10px] md:text-sm lg:text-base">REMOTE (GLOBAL)</span>
             </span>
 
             <button 
               onClick={scrollToWork} 
-              className="bg-[#a3ff00] text-black px-10 py-4 rounded-full font-black tracking-[0.3em] hover:bg-white transition-all active:scale-95 text-[10px] md:text-[13px] shadow-[0_0_40px_rgba(163,255,0,0.3)]"
+              className="bg-[#a3ff00] text-black px-6 md:px-10 py-3 md:py-4 rounded-full font-black tracking-[0.2em] md:tracking-[0.3em] hover:bg-white transition-all active:scale-95 text-[9px] md:text-[13px] shadow-[0_0_40px_rgba(163,255,0,0.3)]"
             >
               DEPLOYED_SYSTEMS ↓
             </button>
@@ -320,7 +322,7 @@ const App: React.FC = () => {
                   <div className="flex flex-col sm:flex-row gap-6">
                     {p.link && (
                       <button 
-                        onClick={() => setActiveDemo({ url: p.link!, title: p.title, projectId: p.id })}
+                        onClick={() => setActiveDemo({ url: decodeLink(p.link!), title: p.title, projectId: p.id })}
                         className="group relative inline-flex items-center gap-4 md:gap-6 bg-white text-black px-6 md:px-10 py-4 md:py-6 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.4em] hover:bg-[#a3ff00] transition-all justify-center overflow-hidden flex-1"
                       >
                         <span className="relative z-10">Initialize Demo</span>
@@ -337,7 +339,7 @@ const App: React.FC = () => {
                 {p.description.map((bullet, i) => (
                   <div key={i} className="flex items-start gap-4 md:gap-8 group/item">
                     <div className="mt-1 md:mt-2 text-[#a3ff00] font-black text-2xl md:text-3xl group-hover/item:translate-x-1 transition-transform">→</div>
-                    <p className="text-lg sm:text-xl md:text-3xl text-white leading-[1.2] font-bold tracking-tight group-hover/item:text-[#a3ff00] transition-colors">
+                    <p className="text-lg sm:text-xl md:text-3xl text-white font-bold tracking-tight group-hover/item:text-[#a3ff00] transition-colors">
                       {bullet}
                     </p>
                   </div>
