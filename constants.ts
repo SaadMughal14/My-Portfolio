@@ -1,3 +1,4 @@
+
 export interface Project {
   id: string;
   title: string;
@@ -9,13 +10,6 @@ export interface Project {
   version?: string;
 }
 
-/**
- * Obfuscation protocol:
- * 1. Take URL
- * 2. Convert to Base64
- * 3. Reverse the string
- * This prevents simple 'atob' discovery in console or source inspection.
- */
 export const PROJECTS: Project[] = [
   {
     id: "project-outreach",
@@ -29,7 +23,7 @@ export const PROJECTS: Project[] = [
       "Persistent data synchronization through Supabase for high-conversion scalable pipelines."
     ],
     tech: "Gemini 3 Pro, Google Search Tool, Next.js, Supabase, SMTP2GO",
-    link: "==AclV2bvNnczNHM0cjNyMGN0MXIwdmJ2TjJjejNOTU0Y2MxTjB3YnZOMmN6M01N", // Double obfuscated/Mock example
+    link: "https://operator1-prospects4-cs2.vercel.app",
     accent: "#a3ff00"
   },
   {
@@ -44,7 +38,7 @@ export const PROJECTS: Project[] = [
       "Serves as my company's 'billion-dollar face' to demonstrate deployment-ready capabilities."
     ],
     tech: "React, SCADA Visualization, Zero Trust Security, Gemini 3 Pro Ready",
-    link: "ccHAudmVyY2VsLmFwcC8vY3Mtb3BlcmF0b3IuaHR0cHM=", // Reverse Base64
+    link: "https://operator-cs.vercel.app",
     accent: "#bf00ff"
   },
   {
@@ -59,7 +53,7 @@ export const PROJECTS: Project[] = [
       "Automated defect detection system to eliminate manual inspection errors."
     ],
     tech: "Gemini 3 Flash, React, Physics Engine, Real-time Telemetry",
-    link: "ccHAudmVyY2VsLnZpc2lvbi1waGFybWEuaHR0cHM=",
+    link: "https://pharma-vision.vercel.app",
     accent: "#00f5ff"
   },
   {
@@ -74,7 +68,7 @@ export const PROJECTS: Project[] = [
       "Live performance charting with Recharts and persistent fleet management."
     ],
     tech: "Gemini 2.5 Flash, React, Recharts, LocalStorage, Maps API",
-    link: "ccHAudmVyY2VsLmlzcC1kaXNwYXRjaC1wcm9qZWN0Lmh0dHBz",
+    link: "https://project-dispatch-psi.vercel.app",
     accent: "#a3ff00"
   },
   {
@@ -89,7 +83,7 @@ export const PROJECTS: Project[] = [
       "Utilizes Shopify Webhooks and Airtable API for intelligent record-keeping."
     ],
     tech: "Gemini 2.5 Flash, Shopify Webhooks, Airtable API, Slack Integration",
-    link: "ccHAudmVyY2VsLm9wcy1zeW5jLXByb2plY3QuaHR0cHM=",
+    link: "https://project-sync-ops.vercel.app",
     accent: "#00f5ff"
   },
   {
@@ -104,7 +98,7 @@ export const PROJECTS: Project[] = [
       "Instant detection of service interruptions with intelligent response."
     ],
     tech: "Gemini 2.5 Flash, Node Telemetry, State Machines, Root Cause Analysis",
-    link: "ccHAudmVyY2VsLmVrZWwtcHVsc2UtcHJvamVjdC5odHRwcw==",
+    link: "https://project-pulse-lake.vercel.app",
     accent: "#ff0044"
   },
   {
@@ -119,7 +113,7 @@ export const PROJECTS: Project[] = [
       "Optimizes viral-ready content Repurposing with Structured Metadata."
     ],
     tech: "Gemini 2.5 Flash, JSON Schema, Browser APIs, Tailwind CSS",
-    link: "ccHAudmVyY2VsLmVnaWViLWFtcGxpZnktcHJvamVjdC5odHRwcw==",
+    link: "https://project-amplify-beige.vercel.app",
     accent: "#bf00ff"
   },
   {
@@ -134,7 +128,7 @@ export const PROJECTS: Project[] = [
       "Solves the challenge of empty clinical chairs via intelligent patient matching."
     ],
     tech: "Gemini 2.5 Flash, Structured JSON, LocalStorage, React",
-    link: "ccHAudmVyY2VsLmF0ZXotYm9va2luZy1wcm9qZWN0Lmh0dHBz",
+    link: "https://project-booking-zeta.vercel.app",
     accent: "#a3ff00"
   },
   {
@@ -149,7 +143,7 @@ export const PROJECTS: Project[] = [
       "Solves the manual bottleneck of high-volume HR screening."
     ],
     tech: "Gemini 2.5 Flash, PDF Parsing, Google Calendar API, React",
-    link: "ccHAudmVyY2VsLnNjb3V0LXByb2plY3QuaHR0cHM=",
+    link: "https://project-scout.vercel.app",
     accent: "#00f5ff"
   },
   {
@@ -164,7 +158,7 @@ export const PROJECTS: Project[] = [
       "Elegant customer interface paired with detailed system monitoring."
     ],
     tech: "Gemini 2.5 Flash, Function Calling, Setup Wizard, Mock-DB",
-    link: "ccHAudmVyY2VsLmlhLXRyb3BwdXMtcW5pbXVsLmh0dHBz",
+    link: "https://lumina-support-ai.vercel.app",
     accent: "#bf00ff"
   },
   {
@@ -179,7 +173,7 @@ export const PROJECTS: Project[] = [
       "Prevents overselling by mimicking live API traffic across connected channels."
     ],
     tech: "Gemini 2.5 Flash, Webhooks, Shopify/Amazon Simulation, LocalStorage",
-    link: "ccHAudmVyY2VsLmVkYmotZWxpcGtjb3RzLXByb2plY3QuaHR0cHM=",
+    link: "https://project-stockpile-jade.vercel.app",
     accent: "#a3ff00"
   },
   {
@@ -194,7 +188,7 @@ export const PROJECTS: Project[] = [
       "Transforms raw financial files into actionable accounting data."
     ],
     tech: "Gemini 2.5 Flash, Multimodal OCR, JSON Schema, React",
-    link: "ccHAudmVyY2VsLnRyYWN0eGUtcHJvamVjdC5odHRwcw==",
+    link: "https://project-extract.vercel.app",
     accent: "#00f5ff"
   },
   {
@@ -209,17 +203,10 @@ export const PROJECTS: Project[] = [
       "Crash-proof workflow with Auto-Save and 3-session recovery history."
     ],
     tech: "Gemini 2.5 Flash, Logic Simulation, Truth Table Analysis, React",
-    link: "ccHAudmVyY2VsLnRjZXRpaGNocmEtY2lnb2wtc3V4ZW4uaHR0cHM=",
+    link: "https://nexus-logic-architect.vercel.app",
     accent: "#a3ff00"
   }
 ];
-
-// Special mapping for standard Base64 links if they are already in the list
-PROJECTS.forEach(p => {
-    // Correct actual URLs if the above mocks were used
-    if (p.id === 'project-outreach') p.link = "ccHAudmVyY2VsLjJzYy00c3RjZXBzb3JwLTEvcm90YXJlcG8uaHR0cHM=";
-    if (p.id === 'operator-cs') p.link = "ccHAudmVyY2VsLnN2LW90YXJlcG8uaHR0cHM=";
-});
 
 export const EXPERIENCE = [
   {
