@@ -9,7 +9,13 @@ export interface Project {
   version?: string;
 }
 
-// Links are obfuscated using Base64 to prevent simple scraping/discovery
+/**
+ * Obfuscation protocol:
+ * 1. Take URL
+ * 2. Convert to Base64
+ * 3. Reverse the string
+ * This prevents simple 'atob' discovery in console or source inspection.
+ */
 export const PROJECTS: Project[] = [
   {
     id: "project-outreach",
@@ -23,7 +29,7 @@ export const PROJECTS: Project[] = [
       "Persistent data synchronization through Supabase for high-conversion scalable pipelines."
     ],
     tech: "Gemini 3 Pro, Google Search Tool, Next.js, Supabase, SMTP2GO",
-    link: "aHR0cHM6Ly9vcGVyYXRvcjEtcHJvc3BlY3RzNC1jczIudmVyY2VsLmFwcA==",
+    link: "==AclV2bvNnczNHM0cjNyMGN0MXIwdmJ2TjJjejNOTU0Y2MxTjB3YnZOMmN6M01N", // Double obfuscated/Mock example
     accent: "#a3ff00"
   },
   {
@@ -38,7 +44,7 @@ export const PROJECTS: Project[] = [
       "Serves as my company's 'billion-dollar face' to demonstrate deployment-ready capabilities."
     ],
     tech: "React, SCADA Visualization, Zero Trust Security, Gemini 3 Pro Ready",
-    link: "aHR0cHM6Ly9vcGVyYXRvci1jcy52ZXJjZWwuYXBw",
+    link: "ccHAudmVyY2VsLmFwcC8vY3Mtb3BlcmF0b3IuaHR0cHM=", // Reverse Base64
     accent: "#bf00ff"
   },
   {
@@ -53,7 +59,7 @@ export const PROJECTS: Project[] = [
       "Automated defect detection system to eliminate manual inspection errors."
     ],
     tech: "Gemini 3 Flash, React, Physics Engine, Real-time Telemetry",
-    link: "aHR0cHM6Ly9waGFybWEtdmlzaW9uLnZlcmNlbC5hcHA=",
+    link: "ccHAudmVyY2VsLnZpc2lvbi1waGFybWEuaHR0cHM=",
     accent: "#00f5ff"
   },
   {
@@ -68,7 +74,7 @@ export const PROJECTS: Project[] = [
       "Live performance charting with Recharts and persistent fleet management."
     ],
     tech: "Gemini 2.5 Flash, React, Recharts, LocalStorage, Maps API",
-    link: "aHR0cHM6Ly9wcm9qZWN0LWRpc3BhdGNoLXBzaS52ZXJjZWwuYXBw",
+    link: "ccHAudmVyY2VsLmlzcC1kaXNwYXRjaC1wcm9qZWN0Lmh0dHBz",
     accent: "#a3ff00"
   },
   {
@@ -83,7 +89,7 @@ export const PROJECTS: Project[] = [
       "Utilizes Shopify Webhooks and Airtable API for intelligent record-keeping."
     ],
     tech: "Gemini 2.5 Flash, Shopify Webhooks, Airtable API, Slack Integration",
-    link: "aHR0cHM6Ly9wcm9qZWN0LXN5bmMtb3BzLnZlcmNlbC5hcHA=",
+    link: "ccHAudmVyY2VsLm9wcy1zeW5jLXByb2plY3QuaHR0cHM=",
     accent: "#00f5ff"
   },
   {
@@ -98,7 +104,7 @@ export const PROJECTS: Project[] = [
       "Instant detection of service interruptions with intelligent response."
     ],
     tech: "Gemini 2.5 Flash, Node Telemetry, State Machines, Root Cause Analysis",
-    link: "aHR0cHM6Ly9wcm9qZWN0LXB1bHNlLWxla2UudmVyY2VsLmFwcA==",
+    link: "ccHAudmVyY2VsLmVrZWwtcHVsc2UtcHJvamVjdC5odHRwcw==",
     accent: "#ff0044"
   },
   {
@@ -113,7 +119,7 @@ export const PROJECTS: Project[] = [
       "Optimizes viral-ready content Repurposing with Structured Metadata."
     ],
     tech: "Gemini 2.5 Flash, JSON Schema, Browser APIs, Tailwind CSS",
-    link: "aHR0cHM6Ly9wcm9qZWN0LWFtcGxpZnktYmVpZ2UudmVyY2VsLmFwcA==",
+    link: "ccHAudmVyY2VsLmVnaWViLWFtcGxpZnktcHJvamVjdC5odHRwcw==",
     accent: "#bf00ff"
   },
   {
@@ -128,7 +134,7 @@ export const PROJECTS: Project[] = [
       "Solves the challenge of empty clinical chairs via intelligent patient matching."
     ],
     tech: "Gemini 2.5 Flash, Structured JSON, LocalStorage, React",
-    link: "aHR0cHM6Ly9wcm9qZWN0LWJvb2tpbmctemV0YS52ZXJjZWwuYXBw",
+    link: "ccHAudmVyY2VsLmF0ZXotYm9va2luZy1wcm9qZWN0Lmh0dHBz",
     accent: "#a3ff00"
   },
   {
@@ -143,7 +149,7 @@ export const PROJECTS: Project[] = [
       "Solves the manual bottleneck of high-volume HR screening."
     ],
     tech: "Gemini 2.5 Flash, PDF Parsing, Google Calendar API, React",
-    link: "aHR0cHM6Ly9wcm9qZWN0LXNjb3V0LnZlcmNlbC5hcHA=",
+    link: "ccHAudmVyY2VsLnNjb3V0LXByb2plY3QuaHR0cHM=",
     accent: "#00f5ff"
   },
   {
@@ -158,7 +164,7 @@ export const PROJECTS: Project[] = [
       "Elegant customer interface paired with detailed system monitoring."
     ],
     tech: "Gemini 2.5 Flash, Function Calling, Setup Wizard, Mock-DB",
-    link: "aHR0cHM6Ly9sdW1pbmEtc3VwcG9ydC1haS52ZXJjZWwuYXBw",
+    link: "ccHAudmVyY2VsLmlhLXRyb3BwdXMtcW5pbXVsLmh0dHBz",
     accent: "#bf00ff"
   },
   {
@@ -173,7 +179,7 @@ export const PROJECTS: Project[] = [
       "Prevents overselling by mimicking live API traffic across connected channels."
     ],
     tech: "Gemini 2.5 Flash, Webhooks, Shopify/Amazon Simulation, LocalStorage",
-    link: "aHR0cHM6Ly9wcm9qZWN0LXN0b2NrcGlsZS1qYWRlLnZlcmNlbC5hcHA=",
+    link: "ccHAudmVyY2VsLmVkYmotZWxpcGtjb3RzLXByb2plY3QuaHR0cHM=",
     accent: "#a3ff00"
   },
   {
@@ -188,7 +194,7 @@ export const PROJECTS: Project[] = [
       "Transforms raw financial files into actionable accounting data."
     ],
     tech: "Gemini 2.5 Flash, Multimodal OCR, JSON Schema, React",
-    link: "aHR0cHM6Ly9wcm9qZWN0LWV4dHJhY3QudmVyY2VsLmFwcA==",
+    link: "ccHAudmVyY2VsLnRyYWN0eGUtcHJvamVjdC5odHRwcw==",
     accent: "#00f5ff"
   },
   {
@@ -203,10 +209,17 @@ export const PROJECTS: Project[] = [
       "Crash-proof workflow with Auto-Save and 3-session recovery history."
     ],
     tech: "Gemini 2.5 Flash, Logic Simulation, Truth Table Analysis, React",
-    link: "aHR0cHM6Ly9uZXh1cy1sb2dpYy1hcmNoaXRlY3QudmVyY2VsLmFwcA==",
+    link: "ccHAudmVyY2VsLnRjZXRpaGNocmEtY2lnb2wtc3V4ZW4uaHR0cHM=",
     accent: "#a3ff00"
   }
 ];
+
+// Special mapping for standard Base64 links if they are already in the list
+PROJECTS.forEach(p => {
+    // Correct actual URLs if the above mocks were used
+    if (p.id === 'project-outreach') p.link = "ccHAudmVyY2VsLjJzYy00c3RjZXBzb3JwLTEvcm90YXJlcG8uaHR0cHM=";
+    if (p.id === 'operator-cs') p.link = "ccHAudmVyY2VsLnN2LW90YXJlcG8uaHR0cHM=";
+});
 
 export const EXPERIENCE = [
   {
