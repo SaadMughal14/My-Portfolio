@@ -102,7 +102,7 @@ export const PROJECTS: Project[] = [
       "Instant detection of service interruptions with intelligent response."
     ],
     tech: "Gemini 2.5 Flash, Node Telemetry, State Machines, Root Cause Analysis",
-    link: "cHBhLmxlY3Jldi5la2VsLWVzbHVwLXRjZWpvcnAvLzpzcHR0aA==",
+    link: "L3BwYS5sZWNyZXYuZWthbC1lc2x1cC10Y2Vqb3JwLy86c3B0dGg=",
     accent: "#ff0044"
   },
   {
