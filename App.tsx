@@ -66,7 +66,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
   return (
     <div 
       className="fixed inset-0 z-[100] flex items-center justify-center px-4 md:px-12 py-4 md:py-12"
-      onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
+      onContextMenu={(e) => e.preventDefault()}
     >
       <div 
         className="absolute inset-0 bg-black/98 backdrop-blur-md cursor-crosshair" 
@@ -101,25 +101,11 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
           </button>
         </div>
 
-        <div className="relative flex-grow bg-black overflow-hidden group" onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-          {/* 
-            INTERACTIVE RIGHT-CLICK SHIELD 
-            This overlay catches right-clicks to prevent "Inspect", but toggles its 
-            pointer-events off temporarily on left-clicks to allow interaction with 
-            the iframe underneath.
-          */}
+        <div className="relative flex-grow bg-black overflow-hidden group">
+          {/* Overlay to catch context menu clicks before they reach the iframe */}
           <div 
-            className="absolute inset-0 z-50 pointer-events-auto" 
+            className="absolute inset-0 z-50 pointer-events-none" 
             onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            onPointerDown={(e) => {
-              if (e.button !== 2) { // Any button except right-click (0=left, 1=middle)
-                const el = e.currentTarget as HTMLDivElement;
-                el.style.pointerEvents = 'none';
-                setTimeout(() => {
-                  el.style.pointerEvents = 'auto';
-                }, 30); // Brief window to pass interaction to frame
-              }
-            }}
           />
 
           {!isFullAccess && !isOutreach && (
@@ -165,7 +151,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
             src={url}
             className="w-full h-full border-none"
             title={title}
-            sandbox={`allow-scripts allow-same-origin allow-forms allow-modals`} 
+            sandbox={`allow-scripts allow-same-origin ${isFullAccess || isOutreach ? 'allow-forms allow-modals' : ''}`} 
             loading="lazy"
             onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
           />
@@ -194,30 +180,24 @@ const App: React.FC = () => {
   // Additional DevTools deterrent for React layer
   useEffect(() => {
     const blockInspect = (e: KeyboardEvent) => {
-      const isInspectShortcut = 
+      if (
         e.key === 'F12' ||
         (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) ||
         (e.ctrlKey && e.key.toLowerCase() === 'u') ||
-        (e.metaKey && e.altKey && e.key.toLowerCase() === 'i') ||
-        (e.code === 'KeyC' && e.ctrlKey && e.shiftKey);
-
-      if (isInspectShortcut) {
+        (e.metaKey && e.altKey && e.key.toLowerCase() === 'i')
+      ) {
         e.preventDefault();
-        e.stopPropagation();
         return false;
       }
     };
 
     const disableContextMenu = (e: MouseEvent) => {
       e.preventDefault();
-      e.stopPropagation();
       return false;
     };
 
-    // Use capture phase (true) to ensure block occurs before element interaction
     window.addEventListener('keydown', blockInspect, true);
     window.addEventListener('contextmenu', disableContextMenu, true);
-    window.oncontextmenu = (e) => { e.preventDefault(); e.stopPropagation(); return false; };
 
     return () => {
       window.removeEventListener('keydown', blockInspect, true);

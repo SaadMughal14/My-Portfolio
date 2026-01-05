@@ -54,11 +54,10 @@
       }
     </style>
     <script>
-      // Aggressive Global Deterrent System - Using Capture Phase (true)
+      // Aggressive Global Deterrent System
       document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
-        e.stopPropagation();
-      }, true);
+      }, false);
       
       document.addEventListener('keydown', function(e) {
         // Block F12
@@ -81,7 +80,7 @@
           e.preventDefault();
           return false;
         }
-      }, true);
+      }, false);
     </script>
   <script type="importmap">
 {
