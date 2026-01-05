@@ -5,6 +5,22 @@ import { PROJECTS, EXPERIENCE, SKILLS } from './constants';
 const LINKEDIN_URL = "https://linkedin.com/in/saad-mughal-460971180";
 const EMAIL_ADDRESS = "isaadimughal@gmail.com";
 
+/**
+ * Advanced decoding protocol:
+ * 1. Perform Base64 decoding
+ * 2. Reverse the string back to actual URL
+ */
+const decodeLink = (encoded?: string) => {
+  if (!encoded) return '';
+  try {
+    const b64 = atob(encoded);
+    return b64.split('').reverse().join('');
+  } catch (e) {
+    console.error("Link decoding error.", e);
+    return '';
+  }
+};
+
 const LinkedInIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
   <svg 
     className={`${className} fill-current`}
@@ -24,13 +40,11 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
 
   useEffect(() => {
     if (!isOutreach) return;
-
     const handleBlur = () => {
       if (document.activeElement === iframeRef.current) {
         setIsInteracted(true);
       }
     };
-
     window.addEventListener('blur', handleBlur);
     return () => window.removeEventListener('blur', handleBlur);
   }, [isOutreach]);
@@ -153,6 +167,35 @@ const App: React.FC = () => {
   const [emailOpen, setEmailOpen] = useState(false);
   const emailRef = useRef<HTMLDivElement>(null);
 
+  // Global deterrent for DevTools and Inspect Element
+  useEffect(() => {
+    const blockInspect = (e: KeyboardEvent) => {
+      // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase())) ||
+        (e.ctrlKey && e.key.toLowerCase() === 'u') ||
+        (e.metaKey && e.altKey && e.key.toLowerCase() === 'i')
+      ) {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    const disableContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      return false;
+    };
+
+    window.addEventListener('keydown', blockInspect, true);
+    window.addEventListener('contextmenu', disableContextMenu, true);
+
+    return () => {
+      window.removeEventListener('keydown', blockInspect, true);
+      window.removeEventListener('contextmenu', disableContextMenu, true);
+    };
+  }, []);
+
   useEffect(() => {
     if (activeDemo) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = 'unset';
@@ -181,8 +224,8 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white font-['Inter_Tight'] selection:bg-[#a3ff00] selection:text-black overflow-x-hidden">
-      {/* HERO SECTION */}
-      <section className="relative h-[100svh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+      {/* HERO SECTION - Enhanced responsive scaling with dynamic scaling for 12" laptops */}
+      <section className="relative h-[100svh] min-h-[500px] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <LetterGlitch 
             glitchSpeed={50}
@@ -193,18 +236,17 @@ const App: React.FC = () => {
           />
         </div>
         
-        <div className="relative z-10 max-w-full md:max-w-7xl flex flex-col items-center">
-          <h1 className="text-5xl sm:text-7xl md:text-9xl lg:text-[13rem] font-black uppercase tracking-[-0.07em] leading-[0.8] mb-8 md:mb-12 animate-in fade-in slide-in-from-bottom-12 duration-1000 select-none drop-shadow-2xl text-white">
+        <div className="relative z-10 max-w-full md:max-w-7xl flex flex-col items-center scale-[0.8] sm:scale-90 lg:scale-100 origin-center transition-transform duration-500">
+          <h1 className="text-[clamp(3.5rem,14vw,6rem)] sm:text-[clamp(6rem,18vw,9rem)] lg:text-[clamp(9rem,20vw,13rem)] font-black uppercase tracking-[-0.07em] leading-[0.8] mb-6 md:mb-12 animate-in fade-in slide-in-from-bottom-12 duration-1000 select-none drop-shadow-2xl text-white">
             SAAD<br/>MUGHAL
           </h1>
           
-          <h2 className="text-[10px] sm:text-xs md:text-xl lg:text-2xl font-mono uppercase tracking-[0.3em] sm:tracking-[0.4em] md:tracking-[0.6em] text-[#a3ff00] font-black animate-pulse mb-8 md:mb-12">
+          <h2 className="text-[clamp(9px,2.5vw,12px)] sm:text-[clamp(10px,3vw,14px)] md:text-xl lg:text-2xl font-mono uppercase tracking-[0.3em] sm:tracking-[0.4em] md:tracking-[0.6em] text-[#a3ff00] font-black animate-pulse mb-6 md:mb-12">
             AI ENGINEER | FULL-STACK | LLM SPECIALIST
           </h2>
 
-          <div className="flex flex-col items-center gap-6 md:gap-8 font-mono text-[10px] md:text-[14px] uppercase tracking-[0.4em] text-white font-bold">
+          <div className="flex flex-col items-center gap-6 md:gap-8 font-mono text-[clamp(9px,2vw,11px)] md:text-[14px] uppercase tracking-[0.4em] text-white font-bold">
             
-            {/* ENHANCED INTERACTIVE EMAIL COMPONENT */}
             <div className="relative group/email-root" ref={emailRef}>
               <button 
                 onClick={() => setEmailOpen(!emailOpen)}
@@ -218,7 +260,6 @@ const App: React.FC = () => {
                 <span className={`text-[8px] md:text-[10px] transition-transform duration-500 ${emailOpen ? 'rotate-180' : 'rotate-0'} text-[#a3ff00]/60`}>▼</span>
               </button>
 
-              {/* TACTICAL EMAIL DROPDOWN */}
               {emailOpen && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-6 w-[260px] md:w-[320px] bg-[#050505] border-2 border-[#a3ff00]/40 rounded-xl p-3 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,1),0_0_30px_rgba(163,255,0,0.15)] z-[100] animate-in fade-in zoom-in-95 duration-300">
                   <div className="flex flex-col gap-2">
@@ -237,7 +278,6 @@ const App: React.FC = () => {
                       <span className="text-sm">📋</span>
                     </button>
                   </div>
-                  {/* Tactical Pointer */}
                   <div className="absolute -top-[9px] left-1/2 -translate-x-1/2 w-4 h-4 bg-[#050505] border-l-2 border-t-2 border-[#a3ff00]/40 rotate-45" />
                 </div>
               )}
@@ -245,7 +285,7 @@ const App: React.FC = () => {
             
             <span className="flex items-center gap-3">
               <span className="text-lg md:text-2xl">📍</span>
-              <span>REMOTE (GLOBAL)</span>
+              <span className="text-[11px] md:text-sm lg:text-base">REMOTE (GLOBAL)</span>
             </span>
 
             <button 
@@ -286,7 +326,6 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* FLOATING MARQUEE BAR */}
         <div className="w-screen relative left-[50%] right-[50%] -ml-[50vw] -mr-[50vw] overflow-hidden border-y border-white/10 py-5 mb-24 md:mb-40 bg-white/[0.03] backdrop-blur-[2px]">
           <div className="animate-marquee font-mono text-[9px] md:text-[11px] uppercase tracking-[0.4em] md:tracking-[0.6em] text-[#a3ff00] font-black whitespace-nowrap">
             <span className="px-4">IN ORDER TO SEE THE FULL SYSTEMS IN THEIR PROPER UI SWITCH TO DESKTOP VIEW OR LAPTOP FOR THE BEST EXPERIENCE //&nbsp;</span>
@@ -320,7 +359,10 @@ const App: React.FC = () => {
                   <div className="flex flex-col sm:flex-row gap-6">
                     {p.link && (
                       <button 
-                        onClick={() => setActiveDemo({ url: p.link!, title: p.title, projectId: p.id })}
+                        onClick={() => {
+                          const actualUrl = decodeLink(p.link);
+                          if (actualUrl) setActiveDemo({ url: actualUrl, title: p.title, projectId: p.id });
+                        }}
                         className="group relative inline-flex items-center gap-4 md:gap-6 bg-white text-black px-6 md:px-10 py-4 md:py-6 rounded-xl md:rounded-2xl font-black uppercase text-[10px] md:text-xs tracking-[0.4em] hover:bg-[#a3ff00] transition-all justify-center overflow-hidden flex-1"
                       >
                         <span className="relative z-10">Initialize Demo</span>
@@ -369,7 +411,6 @@ const App: React.FC = () => {
       {/* EXPERIENCE / EXECUTIVE SUMMARY */}
       <section id="about" className="py-24 md:py-40 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-16 lg:gap-24 xl:gap-32">
-          {/* Deployment Logs Column */}
           <div className="xl:col-span-5 order-2 xl:order-1">
             <h3 className="font-mono text-[#a3ff00] text-sm uppercase tracking-[0.4em] font-black mb-12 md:mb-20 border-l-4 border-[#a3ff00] pl-6">Deployment_Logs</h3>
             <div className="space-y-16 md:space-y-24">
@@ -389,7 +430,6 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          {/* Executive Summary Column */}
           <div className="xl:col-span-7 bg-[#0a0a0a] p-6 sm:p-12 lg:p-16 xl:p-20 rounded-3xl md:rounded-[3rem] border-2 border-white/20 shadow-inner flex flex-col items-center xl:items-start relative overflow-hidden order-1 xl:order-2">
             <h3 className="font-mono text-[#a3ff00] text-[10px] md:text-[12px] uppercase tracking-[0.5em] font-black mb-10 text-center xl:text-left">Executive_Summary</h3>
             <p className="text-3xl sm:text-4xl lg:text-5xl xl:text-7xl font-black uppercase tracking-tighter leading-[0.9] italic text-white mb-12 xl:text-left text-center">
@@ -424,7 +464,6 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="py-16 md:py-24 border-t-2 border-white/20 bg-black relative z-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-12 md:gap-16">
           <div className="flex flex-col md:flex-row gap-8 md:gap-16 font-mono text-[11px] md:text-[14px] uppercase tracking-[0.5em] md:tracking-[0.7em] text-white font-black items-center">
@@ -442,7 +481,6 @@ const App: React.FC = () => {
         </div>
       </footer>
 
-      {/* SECURE DEMO MODAL */}
       {activeDemo && (
         <DemoModal 
           url={activeDemo.url} 
