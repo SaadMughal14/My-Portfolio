@@ -33,27 +33,13 @@ const LinkedInIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
 
 const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClose: () => void }> = ({ url, title, projectId, onClose }) => {
   const isFullAccess = projectId === 'operator-cs';
-  const isOutreach = projectId === 'project-outreach';
-  
-  const [isInteracted, setIsInteracted] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
-    if (!isOutreach) return;
-    const handleBlur = () => {
-      if (document.activeElement === iframeRef.current) {
-        setIsInteracted(true);
-      }
-    };
-    window.addEventListener('blur', handleBlur);
-    return () => window.removeEventListener('blur', handleBlur);
-  }, [isOutreach]);
-
-  useEffect(() => {
-    const shouldLockKeyboard = !isFullAccess && (!isOutreach || isInteracted);
-    if (!shouldLockKeyboard) return;
+    if (isFullAccess) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Block all keyboard interaction in restricted projects
       if (e.key.length === 1 || e.key === 'Enter' || e.key === 'Backspace') {
         e.preventDefault();
         e.stopPropagation();
@@ -61,7 +47,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
     };
     window.addEventListener('keydown', handleKeyDown, true);
     return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, [isFullAccess, isOutreach, isInteracted]);
+  }, [isFullAccess]);
 
   return (
     <div 
@@ -78,7 +64,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         <div className="flex flex-col md:flex-row md:items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-white/20 bg-[#0a0a0a] gap-3">
           <div className="flex items-center gap-3">
             <div className="flex gap-1.5">
-              <div className={`w-2.5 h-2.5 rounded-full ${isInteracted && !isFullAccess ? 'bg-red-600' : 'bg-green-500'} animate-pulse`} />
+              <div className={`w-2.5 h-2.5 rounded-full ${!isFullAccess ? 'bg-red-600' : 'bg-green-500'} animate-pulse`} />
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
             </div>
@@ -88,7 +74,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
                 PROTOTYPE_VIEWER // {title}
               </span>
               <span className="font-mono text-[7px] md:text-[8px] uppercase tracking-[0.2em] text-white font-bold">
-                ACTIVE_MODE: {isFullAccess ? 'FULL_ACCESS' : isInteracted ? 'RESTRICTED' : 'UNINITIALIZED'}
+                ACTIVE_MODE: {isFullAccess ? 'FULL_ACCESS' : 'RESTRICTED'}
               </span>
             </div>
           </div>
@@ -108,7 +94,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
             onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
           />
 
-          {!isFullAccess && !isOutreach && (
+          {!isFullAccess && (
             <div className="absolute inset-0 z-30 pointer-events-none animate-in fade-in duration-700">
               <div className="absolute inset-0 pointer-events-auto cursor-not-allowed flex items-center justify-center group/shield">
                 <div className="opacity-0 group-hover/shield:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-4 bg-black/90 p-8 rounded-2xl backdrop-blur-sm border border-[#a3ff00]/40">
@@ -123,35 +109,12 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
             </div>
           )}
 
-          {isOutreach && isInteracted && (
-            <div className="absolute inset-0 z-30 flex pointer-events-none animate-in fade-in duration-300">
-              <div className="w-[80px] md:w-[280px] h-full" />
-              <div className="flex-grow h-full pointer-events-auto cursor-not-allowed group/outreach">
-                 <div className="w-full h-full flex flex-col items-center justify-center bg-black/60 opacity-0 group-hover/outreach:opacity-100 transition-opacity duration-500 backdrop-blur-[2px]">
-                    <div className="flex flex-col items-center gap-4 bg-black/90 p-8 rounded-2xl border border-[#a3ff00]/40 shadow-2xl">
-                       <div className="w-12 h-12 border-2 border-[#a3ff00]/60 rounded-full flex items-center justify-center">
-                         <div className="w-3 h-3 bg-red-600 rounded-full animate-ping" />
-                       </div>
-                       <div className="flex flex-col items-center gap-3">
-                         <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#a3ff00] px-6 py-3 border-2 border-[#a3ff00]/40 rounded-md font-bold">
-                           SECURE_CONTENT_LOCKED
-                         </span>
-                         <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-[#a3ff00]/50 font-black">
-                           SIDEBAR_NAV_ONLY
-                         </span>
-                       </div>
-                    </div>
-                 </div>
-              </div>
-            </div>
-          )}
-
           <iframe 
             ref={iframeRef}
             src={url}
             className="w-full h-full border-none"
             title={title}
-            sandbox={`allow-scripts allow-same-origin ${isFullAccess || isOutreach ? 'allow-forms allow-modals' : ''}`} 
+            sandbox={`allow-scripts allow-same-origin ${isFullAccess ? 'allow-forms allow-modals' : ''}`} 
             loading="lazy"
             onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
           />
@@ -161,7 +124,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         
         <div className="px-4 md:px-6 py-2 md:py-3 border-t border-white/20 bg-[#050505] flex justify-between items-center font-mono text-[8px] md:text-[10px] uppercase tracking-[0.3em]">
             <span className="text-white font-bold hidden sm:inline">
-              {isFullAccess ? 'Full Interaction Protocol Active' : isInteracted ? 'Restricted Mode: Use sidebar for navigation' : 'Awaiting primary input...'}
+              {isFullAccess ? 'Full Interaction Protocol Active' : 'Restricted Mode: Content Encrypted'}
             </span>
             <span className="text-[#a3ff00] font-black tracking-widest">
               REF: SAAD_ENG_MOD_{projectId.toUpperCase().replace('-', '_')}
@@ -233,7 +196,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white font-['Inter_Tight'] selection:bg-[#a3ff00] selection:text-black overflow-x-hidden">
-      {/* HERO SECTION - Enhanced scaling logic to handle 12" laptops (approx 1280px width) */}
+      {/* HERO SECTION */}
       <section className="relative h-[100svh] min-h-[500px] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <LetterGlitch 
@@ -245,7 +208,6 @@ const App: React.FC = () => {
           />
         </div>
         
-        {/* Dynamic scale classes for specific viewport ranges to prevent "zoomed" appearance on small laptops */}
         <div className="relative z-10 max-w-full md:max-w-7xl flex flex-col items-center origin-center transition-all duration-700
           scale-[0.7] xs:scale-[0.75] sm:scale-85 md:scale-90 lg:scale-[0.85] xl:scale-100">
           <h1 className="text-[clamp(3rem,12vw,5rem)] sm:text-[clamp(6rem,18vw,9rem)] lg:text-[clamp(8rem,18vw,12rem)] font-black uppercase tracking-[-0.07em] leading-[0.8] mb-6 md:mb-10 animate-in fade-in slide-in-from-bottom-12 duration-1000 select-none drop-shadow-2xl text-white">
@@ -309,7 +271,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* SUMMARY - Optimized spacing for laptop viewports */}
+      {/* SUMMARY */}
       <section className="py-16 md:py-24 lg:py-32 px-6 md:px-12 lg:px-24 bg-black border-y border-white/20 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 md:gap-20">
@@ -328,7 +290,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* DEPLOYMENT ARCHIVE (Projects) - Fluid vertical spacing */}
+      {/* DEPLOYMENT ARCHIVE (Projects) */}
       <section id="work" className="py-16 md:py-32 lg:py-40 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-10 mb-12 md:mb-32">
           <h2 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none text-white">Selected<br/>Builds</h2>
