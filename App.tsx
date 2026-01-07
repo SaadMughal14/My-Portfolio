@@ -97,13 +97,19 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
           {!isFullAccess && (
             <div className="absolute inset-0 z-30 pointer-events-none animate-in fade-in duration-700">
               <div className="absolute inset-0 pointer-events-auto cursor-not-allowed flex items-center justify-center group/shield">
-                <div className="opacity-0 group-hover/shield:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-4 bg-black/90 p-8 rounded-2xl backdrop-blur-sm border border-[#a3ff00]/40">
-                   <div className="w-12 h-12 border-2 border-[#a3ff00]/60 rounded-full flex items-center justify-center">
-                     <div className="w-3 h-3 bg-red-500 rounded-full animate-ping" />
+                <div className="opacity-0 group-hover/shield:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-4 bg-black/95 p-10 rounded-3xl backdrop-blur-md border border-[#a3ff00]/40 shadow-[0_0_80px_rgba(163,255,0,0.1)]">
+                   <div className="w-16 h-16 border-2 border-[#a3ff00]/40 rounded-full flex items-center justify-center mb-2">
+                     <div className="w-4 h-4 bg-red-600 rounded-full animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.8)]" />
                    </div>
-                   <span className="font-mono text-[10px] md:text-[12px] uppercase tracking-[0.5em] text-[#a3ff00] px-6 py-3 border-2 border-[#a3ff00]/40 rounded-md font-bold text-center">
-                     SECURE_CONTENT_LOCKED // HIRE_ME_TO_DECRYPT 🔓😏
-                   </span>
+                   <div className="flex flex-col items-center text-center">
+                     <span className="font-mono text-[10px] md:text-[13px] uppercase tracking-[0.6em] text-[#a3ff00] font-black">
+                       SECURE_CONTENT_LOCKED
+                     </span>
+                     <span className="font-mono text-[16px] md:text-[20px] text-[#a3ff00]/20 my-2 font-light select-none tracking-widest">//</span>
+                     <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-white font-bold bg-[#a3ff00]/10 px-5 py-2 rounded-lg border border-[#a3ff00]/20">
+                       HIRE_ME_TO_DECRYPT 🔓😏
+                     </span>
+                   </div>
                 </div>
               </div>
             </div>
