@@ -192,7 +192,7 @@ export const PROJECTS: Project[] = [
       "Transforms raw financial files into actionable accounting data."
     ],
     tech: "Gemini 2.5 Flash, Multimodal OCR, JSON Schema, React",
-    link: "L3BwYS5sZWNyZXYudGNhcnRoc2UtdGNlam9ycC8vOnNwdHRo",
+    link: "L3BwYS5sZWNyZXYudGNhcnR4ZS10Y2Vqb3JwLy86c3B0dGg=",
     accent: "#00f5ff"
   },
   {
