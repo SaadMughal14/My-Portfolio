@@ -101,8 +101,8 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
                    <div className="w-12 h-12 border-2 border-[#a3ff00]/60 rounded-full flex items-center justify-center">
                      <div className="w-3 h-3 bg-red-500 rounded-full animate-ping" />
                    </div>
-                   <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#a3ff00] px-6 py-3 border-2 border-[#a3ff00]/40 rounded-md font-bold">
-                     SECURE_CONTENT_LOCKED
+                   <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#a3ff00] px-6 py-3 border-2 border-[#a3ff00]/40 rounded-md font-bold text-center">
+                     SECURE_CONTENT_LOCKED // HIRE_ME_TO_DECRYPT 🔓😏
                    </span>
                 </div>
               </div>
