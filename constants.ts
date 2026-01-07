@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
       "Persistent data synchronization through Supabase for high-conversion scalable pipelines."
     ],
     tech: "Gemini 3 Pro, Google Search Tool, Next.js, Supabase, SMTP2GO",
-    link: "cHBhLmxlY3Jldi4yc2MtNHN0Y2Vwc29ycC0xcm90YXJlcG8vLzpzcHR0aA==",
+    link: "L3BwYS5sZWNyZXYuMnNjLTRzdGNlcHNvcnAtMXJvdGFyZXBvLy86c3B0dGg=",
     accent: "#a3ff00"
   },
   {
@@ -42,7 +42,7 @@ export const PROJECTS: Project[] = [
       "Serves as my company's 'billion-dollar face' to demonstrate deployment-ready capabilities."
     ],
     tech: "React, SCADA Visualization, Zero Trust Security, Gemini 3 Pro Ready",
-    link: "cHBhLmxlY3Jldi5zYy1yb3RhcmVwby8vOnNwdHRo",
+    link: "L3BwYS5sZWNyZXYuc2Mtcm90YXJlcG8vLzpzcHR0aA==",
     accent: "#bf00ff"
   },
   {
@@ -57,7 +57,7 @@ export const PROJECTS: Project[] = [
       "Automated defect detection system to eliminate manual inspection errors."
     ],
     tech: "Gemini 3 Flash, React, Physics Engine, Real-time Telemetry",
-    link: "cHBhLmxlY3Jldi5ub2lzaXYtYW1yYWhwLy86c3B0dGg=",
+    link: "L3BwYS5sZWNyZXYubm9pc2l2LWFtcmFocC8vOnNwdHRo",
     accent: "#00f5ff"
   },
   {
@@ -72,7 +72,7 @@ export const PROJECTS: Project[] = [
       "Live performance charting with Recharts and persistent fleet management."
     ],
     tech: "Gemini 2.5 Flash, React, Recharts, LocalStorage, Maps API",
-    link: "cHBhLmxlY3Jldi5pc3AtaGN0YXBzaWQtdGNlam9ycC8vOnNwdHRo",
+    link: "L3BwYS5sZWNyZXYuaXNwLWhjdGFwc2lkLXRjZWpvcnAvLzpzcHR0aA==",
     accent: "#a3ff00"
   },
   {
@@ -87,7 +87,7 @@ export const PROJECTS: Project[] = [
       "Utilizes Shopify Webhooks and Airtable API for intelligent record-keeping."
     ],
     tech: "Gemini 2.5 Flash, Shopify Webhooks, Airtable API, Slack Integration",
-    link: "cHBhLmxlY3Jldi5zcG8tY255cy10Y2Vqb3JwLy86c3B0dGg=",
+    link: "L3BwYS5sZWNyZXYuc3BvLWNueXMtdGNlam9ycC8vOnNwdHRo",
     accent: "#00f5ff"
   },
   {
@@ -102,7 +102,7 @@ export const PROJECTS: Project[] = [
       "Instant detection of service interruptions with intelligent response."
     ],
     tech: "Gemini 2.5 Flash, Node Telemetry, State Machines, Root Cause Analysis",
-    link: "cHBhLmxlY3Jldi5la2VsLWVzbHVwLXRjZWpvcnAvLzpzcHR0aA==",
+    link: "L3BwYS5sZWNyZXYuZWthbC1lc2x1cC10Y2Vqb3JwLy86c3B0dGg=",
     accent: "#ff0044"
   },
   {
@@ -117,7 +117,7 @@ export const PROJECTS: Project[] = [
       "Optimizes viral-ready content Repurposing with Structured Metadata."
     ],
     tech: "Gemini 2.5 Flash, JSON Schema, Browser APIs, Tailwind CSS",
-    link: "cHBhLmxlY3Jldi5lZ2llYi15ZmlscG1hLXRjZWpvcnAvLzpzcHR0aA==",
+    link: "L3BwYS5sZWNyZXYuZWdpZWIteWZpbHBtYS10Y2Vqb3JwLy86c3B0dGg=",
     accent: "#bf00ff"
   },
   {
@@ -132,7 +132,7 @@ export const PROJECTS: Project[] = [
       "Solves the challenge of empty clinical chairs via intelligent patient matching."
     ],
     tech: "Gemini 2.5 Flash, Structured JSON, LocalStorage, React",
-    link: "cHBhLmxlY3Jldi5hdGV6LWduaWtvb2ItdGNlam9ycC8vOnNwdHRo",
+    link: "L3BwYS5sZWNyZXYuYXRlei1nbmlrb29iLXRjZWpvcnAvLzpzcHR0aA==",
     accent: "#a3ff00"
   },
   {
@@ -147,7 +147,7 @@ export const PROJECTS: Project[] = [
       "Solves the manual bottleneck of high-volume HR screening."
     ],
     tech: "Gemini 2.5 Flash, PDF Parsing, Google Calendar API, React",
-    link: "cHBhLmxlY3Jldi50dW9jcy10Y2Vqb3JwLy86c3B0dGg=",
+    link: "L3BwYS5sZWNyZXYudHVvY3MtdGNlam9ycC8vOnNwdHRo",
     accent: "#00f5ff"
   },
   {
@@ -162,7 +162,7 @@ export const PROJECTS: Project[] = [
       "Elegant customer interface paired with detailed system monitoring."
     ],
     tech: "Gemini 2.5 Flash, Function Calling, Setup Wizard, Mock-DB",
-    link: "cHBhLmxlY3Jldi5pYS10cm9wcHVzLWFuaW11bC8vOnNwdHRo",
+    link: "L3BwYS5sZWNyZXYuaWEtdHJvcHB1cy1hbmltdWwvLzpzcHR0aA==",
     accent: "#bf00ff"
   },
   {
@@ -177,7 +177,7 @@ export const PROJECTS: Project[] = [
       "Prevents overselling by mimicking live API traffic across connected channels."
     ],
     tech: "Gemini 2.5 Flash, Webhooks, Shopify/Amazon Simulation, LocalStorage",
-    link: "cHBhLmxlY3Jldi5lZGFqLWVsaXBrY290cy10Y2Vqb3JwLy86c3B0dGg=",
+    link: "L3BwYS5sZWNyZXYuZWRhai1lbGlwa2NvdHMtdGNlam9ycC8vOnNwdHRo",
     accent: "#a3ff00"
   },
   {
@@ -192,7 +192,7 @@ export const PROJECTS: Project[] = [
       "Transforms raw financial files into actionable accounting data."
     ],
     tech: "Gemini 2.5 Flash, Multimodal OCR, JSON Schema, React",
-    link: "cHBhLmxlY3Jldi50Y2FydHhlLXRjZWpvcnAvLzpzcHR0aA==",
+    link: "L3BwYS5sZWNyZXYudGNhcnRoc2UtdGNlam9ycC8vOnNwdHRo",
     accent: "#00f5ff"
   },
   {
@@ -207,7 +207,7 @@ export const PROJECTS: Project[] = [
       "Crash-proof workflow with Auto-Save and 3-session recovery history."
     ],
     tech: "Gemini 2.5 Flash, Logic Simulation, Truth Table Analysis, React",
-    link: "cHBhLmxlY3Jldi50Y2V0aWhjcmEtY2lnb2wtc3V4ZW4vLzpzcHR0aA==",
+    link: "L3BwYS5sZWNyZXYudGNldGloY3JhLWNpZ29sLXN1eGVuLy86c3B0dGg=",
     accent: "#a3ff00"
   }
 ];
