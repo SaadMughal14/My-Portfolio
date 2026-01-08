@@ -33,20 +33,65 @@ const LinkedInIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
 
 const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClose: () => void }> = ({ url, title, projectId, onClose }) => {
   const isFullAccess = projectId === 'operator-cs';
+  const isOutreach = projectId === 'project-outreach';
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  
+  // Track interactions specifically for Outreach logic
+  const [interactionCount, setInteractionCount] = useState(0);
+
+  /**
+   * Lockdown Logic:
+   * - If 'operator-cs' (full access), effectivelyLocked is always false.
+   * - If 'project-outreach', effectivelyLocked is false ONLY for the first click (count 0).
+   * - For all other projects, effectivelyLocked is always true.
+   */
+  const effectivelyLocked = !isFullAccess && (!isOutreach || interactionCount > 0);
+
+  // Robust iframe interaction detection via focus monitoring
+  useEffect(() => {
+    // We only need to monitor focus for Outreach if it hasn't been locked yet
+    if (!isOutreach || interactionCount > 0) return;
+
+    const handleFocusCheck = () => {
+      // If the active element in the parent window is our iframe, the user has clicked/interacted with it
+      if (document.activeElement === iframeRef.current) {
+        setInteractionCount(1);
+      }
+    };
+
+    // Listen for window blur (often triggered when an iframe is clicked)
+    window.addEventListener('blur', handleFocusCheck);
+    
+    // Fallback polling for browsers where blur doesn't fire as expected for iframe clicks
+    const checkInterval = setInterval(handleFocusCheck, 150);
+
+    return () => {
+      window.removeEventListener('blur', handleFocusCheck);
+      clearInterval(checkInterval);
+    };
+  }, [isOutreach, interactionCount]);
+
+  const handleManualInteractionCheck = () => {
+    if (isOutreach && interactionCount === 0) {
+      setInteractionCount(1);
+    }
+  };
 
   useEffect(() => {
     if (isFullAccess) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key.length === 1 || e.key === 'Enter' || e.key === 'Backspace') {
-        e.preventDefault();
-        e.stopPropagation();
+      // Block keyboard input only if the system is currently in restricted mode
+      if (effectivelyLocked) {
+        if (e.key.length === 1 || e.key === 'Enter' || e.key === 'Backspace') {
+          e.preventDefault();
+          e.stopPropagation();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown, true);
     return () => window.removeEventListener('keydown', handleKeyDown, true);
-  }, [isFullAccess]);
+  }, [isFullAccess, effectivelyLocked]);
 
   return (
     <div 
@@ -63,7 +108,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
         <div className="flex flex-col md:flex-row md:items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-white/20 bg-[#0a0a0a] gap-3">
           <div className="flex items-center gap-3">
             <div className="flex gap-1.5">
-              <div className={`w-2.5 h-2.5 rounded-full ${!isFullAccess ? 'bg-red-600' : 'bg-green-500'} animate-pulse`} />
+              <div className={`w-2.5 h-2.5 rounded-full ${effectivelyLocked ? 'bg-red-600' : 'bg-green-500'} animate-pulse`} />
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
               <div className="w-2.5 h-2.5 rounded-full bg-white" />
             </div>
@@ -73,7 +118,7 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
                 PROTOTYPE_VIEWER // {title}
               </span>
               <span className="font-mono text-[7px] md:text-[8px] uppercase tracking-[0.2em] text-white font-bold">
-                ACTIVE_MODE: {isFullAccess ? 'FULL_ACCESS' : 'RESTRICTED'}
+                MODE: {isFullAccess ? 'FULL_ACCESS' : (effectivelyLocked ? 'RESTRICTED' : 'ONE_TOUCH_ACTIVE')}
               </span>
             </div>
           </div>
@@ -86,16 +131,16 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
           </button>
         </div>
 
-        <div className="relative flex-grow bg-black overflow-hidden group">
-          <div 
-            className="absolute inset-0 z-50 pointer-events-none" 
-            onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
-          />
-
+        <div 
+          className="relative flex-grow bg-black overflow-hidden group"
+          onMouseDownCapture={handleManualInteractionCheck}
+          onTouchStartCapture={handleManualInteractionCheck}
+        >
+          {/* SECURE OVERLAY SHIELD */}
           {!isFullAccess && (
-            <div className="absolute inset-0 z-30 pointer-events-none animate-in fade-in duration-700">
-              <div className="absolute inset-0 pointer-events-auto cursor-not-allowed flex items-center justify-center group/shield">
-                <div className="opacity-0 group-hover/shield:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-4 bg-black/95 p-10 rounded-3xl backdrop-blur-md border border-[#a3ff00]/40 shadow-[0_0_80px_rgba(163,255,0,0.1)]">
+            <div className={`absolute inset-0 z-30 transition-all duration-500 ${effectivelyLocked ? 'pointer-events-auto cursor-not-allowed opacity-100' : 'pointer-events-none opacity-0'}`}>
+              <div className="absolute inset-0 flex items-center justify-center group/shield transition-all duration-500 group-hover/shield:bg-black/30 group-hover/shield:backdrop-blur-[2px]">
+                <div className="opacity-0 group-hover/shield:opacity-100 transition-opacity duration-500 flex flex-col items-center gap-4 bg-black/95 p-10 rounded-3xl backdrop-blur-md border border-[#a3ff00]/40 shadow-[0_0_80px_rgba(163,255,0,0.15)]">
                    <div className="w-16 h-16 border-2 border-[#a3ff00]/40 rounded-full flex items-center justify-center mb-2">
                      <div className="w-4 h-4 bg-red-600 rounded-full animate-pulse shadow-[0_0_15px_rgba(220,38,38,0.8)]" />
                    </div>
@@ -123,12 +168,13 @@ const DemoModal: React.FC<{ url: string; title: string; projectId: string; onClo
             onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); }}
           />
 
+          {/* SCANLINE OVERLAY */}
           <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.08)_50%),linear-gradient(90deg,rgba(255,0,0,0.02),rgba(0,255,0,0.01),rgba(0,0,255,0.02))] bg-[length:100%_2px,3px_100%] z-10" />
         </div>
         
         <div className="px-4 md:px-6 py-2 md:py-3 border-t border-white/20 bg-[#050505] flex justify-between items-center font-mono text-[8px] md:text-[10px] uppercase tracking-[0.3em]">
             <span className="text-white font-bold hidden sm:inline">
-              {isFullAccess ? 'Full Interaction Protocol Active' : 'Restricted Mode: Content Encrypted'}
+              {(isFullAccess || !effectivelyLocked) ? 'Protocol: Single-Handover Active' : 'Restricted: Secure Logic Shell Active'}
             </span>
             <span className="text-[#a3ff00] font-black tracking-widest">
               REF: SAAD_ENG_MOD_{projectId.toUpperCase().replace('-', '_')}
@@ -342,7 +388,7 @@ const App: React.FC = () => {
                         <div className="absolute inset-0 bg-[#a3ff00] -translate-x-full group-hover:translate-x-0 transition-transform duration-300" />
                       </button>
                     )}
-                    <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-6 md:px-10 py-3 md:py-5 border-2 border-white/40 text-white font-black uppercase text-[10px] md:text-xs tracking-[0.4em] rounded-xl md:rounded-2xl hover:bg-white hover:text-black transition-all flex-1">
+                    <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-6 md:px-10 py-3 md:py-5 border-2 border-white/40 text-white font-black uppercase text-[10px] md:text-xs tracking-wide rounded-xl md:rounded-2xl hover:bg-white hover:text-black transition-all flex-1">
                       Discuss Build
                     </a>
                   </div>
