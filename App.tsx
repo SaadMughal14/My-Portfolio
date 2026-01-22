@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LetterGlitch from './components/LetterGlitch';
+import SplashCursor from './components/SplashCursor';
 import { PROJECTS, EXPERIENCE, SKILLS } from './constants';
 
 const LINKEDIN_URL = "https://linkedin.com/in/saad-mughal-460971180";
@@ -245,6 +246,9 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white font-['Inter_Tight'] selection:bg-[#a3ff00] selection:text-black overflow-x-hidden">
+      {/* CURSOR EFFECT - ONLY ACTIVE WHEN NO MODAL IS OPEN */}
+      {!activeDemo && <SplashCursor />}
+
       {/* HERO SECTION */}
       <section className="relative h-[100svh] min-h-[500px] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
         <div className="absolute inset-0 z-0">
