@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ColorRGB {
   r: number;
@@ -69,8 +69,20 @@ export default function SplashCursor({
   TRANSPARENT = true
 }: SplashCursorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
+    // Initial check for desktop view
+    const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
+  useEffect(() => {
+    // Only run the heavy WebGL logic if on desktop
+    if (!isDesktop) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -1264,6 +1276,7 @@ export default function SplashCursor({
       }
     });
   }, [
+    isDesktop,
     SIM_RESOLUTION,
     DYE_RESOLUTION,
     CAPTURE_RESOLUTION,
@@ -1279,6 +1292,9 @@ export default function SplashCursor({
     BACK_COLOR,
     TRANSPARENT
   ]);
+
+  // Don't render the canvas on mobile
+  if (!isDesktop) return null;
 
   return (
     <div className="fixed top-0 left-0 z-50 pointer-events-none w-full h-full">
